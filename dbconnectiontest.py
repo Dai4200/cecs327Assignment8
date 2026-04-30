@@ -17,6 +17,9 @@ def main():
     )
 
     cur = conn.cursor()
+    '''
+    #FROM HERE ON ITS HOW TO GET THE AVERAGE WATER CONSUMPTION
+    #STILL NEED TO IMPLEMENT WHEN TO SEARCH OTHER DB FOR MISSING ENTRIES 
     cur.execute('SELECT COUNT(*) AS total_entries FROM "My_IoT_Table_virtual";')
 
     result = cur.fetchone()  # returns a single row
@@ -101,6 +104,22 @@ def main():
     avg = cur.fetchone()[0]
     avgLperMin = (avg / 450)
     print(f"Average water consumption was {avgLperMin:.5f} L/min for the last 30 days by Diego's dishwasher")
+    '''
+
+    #MEASURING WHICH HOUSE CONSUMED THE MOST ENERGY IN THE PAST 24 HOURS
+    AVG_FRIDGE_VOLTAGE = 120
+    AVG_DISHWASHER_VOLTAGE = 120
+    #asset uids for Julians devices
+    j_fridge1auid = "ii9-v0j-e92-d3g"
+    j_fridge2auid = "b6946ed7-5447-4812-a9be-c1a64d02b56c"
+    j_dishauid = "u6h-n50-6dj-34f"
+
+    #asset uids for diego's devices
+    d_fridge1auid = "7pf-50d-om7-y4s"
+    d_fridge2auid = "5jd-17k-840-1jx"
+    d_dishauid = "nq3-hfy-9e4-r30"
+
+
 
     cur.close()
     conn.close()
