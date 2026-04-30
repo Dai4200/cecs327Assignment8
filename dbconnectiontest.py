@@ -17,7 +17,7 @@ def main():
     )
 
     cur = conn.cursor()
-    '''
+
     #FROM HERE ON ITS HOW TO GET THE AVERAGE WATER CONSUMPTION
     #STILL NEED TO IMPLEMENT WHEN TO SEARCH OTHER DB FOR MISSING ENTRIES 
     cur.execute('SELECT COUNT(*) AS total_entries FROM "My_IoT_Table_virtual";')
@@ -84,27 +84,7 @@ def main():
     for item in cur.fetchall():
         print(item)
 
-    # get the average pulses from the water flow sensor for the last hour for Diegos dishwasher
-    cur.execute(
-        'SELECT AVG((payload ->> \'Dish-WaterConsumptionSensor\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'7p7-n87-wnt-y6w\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 hour\';')
-    avg = cur.fetchone()[0]
-    avgLperMin = (avg / 450)
-    print(f"Average water consumption was {avgLperMin:.5f} L/min for the last hour by Diego's dishwasher")
 
-    # get the average pulses from the water flow sensor for the last 7 days for Diegos dishwasher
-    cur.execute(
-        'SELECT AVG((payload ->> \'Dish-WaterConsumptionSensor\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'7p7-n87-wnt-y6w\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'7 days\';')
-    avg = cur.fetchone()[0]
-    avgLperMin = (avg / 450)
-    print(f"Average water consumption was {avgLperMin:.5f} L/min for the last 7 days by Diego's dishwasher")
-
-    # get the average pulses from the water flow sensor for the last 30 days for Diegos dishwasher
-    cur.execute(
-        'SELECT AVG((payload ->> \'Dish-WaterConsumptionSensor\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'7p7-n87-wnt-y6w\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'30 days\';')
-    avg = cur.fetchone()[0]
-    avgLperMin = (avg / 450)
-    print(f"Average water consumption was {avgLperMin:.5f} L/min for the last 30 days by Diego's dishwasher")
-    '''
 
     #MEASURING WHICH HOUSE CONSUMED THE MOST ENERGY IN THE PAST 24 HOURS
     AVG_FRIDGE_VOLTAGE = 120

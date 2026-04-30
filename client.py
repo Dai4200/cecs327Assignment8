@@ -41,15 +41,24 @@ def main():
         sys.exit(1)
 
     while True:
-        message = input("Enter message or 'quit' to exit: ").strip()
+        print(f"1. {query1}\n2. {query2}\n3. {query3}")
+        message = input("Choose from the messages or enter 'quit' to exit: ").strip()
 
         if message.lower() == 'quit':
             print("Connection closed.")
             break
 
-        if message not in (query1, query2, query3):
+        elif message.strip() not in ('1', '2', '3'):
             print("Please only enter one of the three accepted queries.")
             continue
+
+        else:
+            if message.lower() == '1':
+                my_message = query1
+            elif message.lower() == '2':
+                my_message = query2
+            elif message.lower() == '3':
+                my_message = query3
 
         client_socket.send(message.encode('utf-8'))
         response = client_socket.recv(1024).decode('utf-8')
