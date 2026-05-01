@@ -48,6 +48,7 @@ def main():
 
         message = data.decode('utf-8')
         print(f"Received: {message}")
+        messages = ''
 
         if message == query1:
             pass
@@ -63,51 +64,51 @@ def main():
                 'SELECT AVG((payload ->> \'YF-S201 - smartdishwasherwaterflow\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'0l4-31e-g1h-037\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 hour\';')
             avg = cur.fetchone()[0]
             avgLperMin = (avg / 450) / 5
-            print(f"Average water consumption was {avgLperMin:.5f} L/min for the last hour days by Julian's dishwasher")
+            messages += f"Average water consumption was {avgLperMin:.5f} L/min for the last hour days by Julian's dishwasher\n"
 
             # get the average pulses from the water flow sensor for the last 7 days for Julians dishwasher
             cur.execute(
                 'SELECT AVG((payload ->> \'YF-S201 - smartdishwasherwaterflow\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'0l4-31e-g1h-037\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'7 days\';')
             avg = cur.fetchone()[0]
             avgLperMin = (avg / 450) / 5
-            print(f"Average water consumption was {avgLperMin:.5f} L/min for the last 7 days by Julian's dishwasher")
+            messages += f"Average water consumption was {avgLperMin:.5f} L/min for the last 7 days by Julian's dishwasher\n"
 
             # get the average pulses from the water flow sensor for the last 30 days for Julians dishwasher
             cur.execute(
                 'SELECT AVG((payload ->> \'YF-S201 - smartdishwasherwaterflow\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'0l4-31e-g1h-037\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'30 days\';')
             avg = cur.fetchone()[0]
             avgLperMin = (avg / 450) / 5
-            print(f"Average water consumption was {avgLperMin:.5f} L/min for the last 30 days by Julian's dishwasher")
+            messages += f"Average water consumption was {avgLperMin:.5f} L/min for the last 30 days by Julian's dishwasher\n"
 
             # get the average pulses from the water flow sensor for the last hour for Diegos dishwasher
             cur.execute(
                 'SELECT AVG((payload ->> \'Dish-WaterConsumptionSensor\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'7p7-n87-wnt-y6w\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 hour\';')
             avg = cur.fetchone()[0]
             avgLperMin = (avg / 450)
-            print(f"Average water consumption was {avgLperMin:.5f} L/min for the last hour by Diego's dishwasher")
+            messages += f"Average water consumption was {avgLperMin:.5f} L/min for the last hour by Diego's dishwasher\n"
 
             # get the average pulses from the water flow sensor for the last 7 days for Diegos dishwasher
             cur.execute(
                 'SELECT AVG((payload ->> \'Dish-WaterConsumptionSensor\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'7p7-n87-wnt-y6w\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'7 days\';')
             avg = cur.fetchone()[0]
             avgLperMin = (avg / 450)
-            print(f"Average water consumption was {avgLperMin:.5f} L/min for the last 7 days by Diego's dishwasher")
+            messages += f"Average water consumption was {avgLperMin:.5f} L/min for the last 7 days by Diego's dishwasher\n"
 
             # get the average pulses from the water flow sensor for the last 30 days for Diegos dishwasher
             cur.execute(
                 'SELECT AVG((payload ->> \'Dish-WaterConsumptionSensor\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'7p7-n87-wnt-y6w\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'30 days\';')
             avg = cur.fetchone()[0]
             avgLperMin = (avg / 450)
-            print(f"Average water consumption was {avgLperMin:.5f} L/min for the last 30 days by Diego's dishwasher")
+            message += f"Average water consumption was {avgLperMin:.5f} L/min for the last 30 days by Diego's dishwasher\n"
 
             cur.close()
             conn.close()
 
         if message == query3:
             pass
-        response = "hi"
-        client_socket.send(response.encode('utf-8'))
-        print(f"Sent: {response}\n")
+
+        client_socket.send(messages.encode('utf-8'))
+        print(f"Sent: {messages}\n")
 
     client_socket.close()
     server_socket.close()
