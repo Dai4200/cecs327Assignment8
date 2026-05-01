@@ -99,7 +99,7 @@ def main():
                 'SELECT AVG((payload ->> \'Dish-WaterConsumptionSensor\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'7p7-n87-wnt-y6w\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'30 days\';')
             avg = cur.fetchone()[0]
             avgLperMin = (avg / 450)
-            message += f"Average water consumption was {avgLperMin:.5f} L/min for the last 30 days by Diego's dishwasher\n"
+            messages += f"Average water consumption was {avgLperMin:.5f} L/min for the last 30 days by Diego's dishwasher\n"
 
             cur.close()
             conn.close()
