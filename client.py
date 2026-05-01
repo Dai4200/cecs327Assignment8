@@ -54,11 +54,11 @@ def main():
 
         else:
             if message.lower() == '1':
-                my_message = query1
+                message = query1
             elif message.lower() == '2':
-                my_message = query2
+                message = query2
             elif message.lower() == '3':
-                my_message = query3
+                message = query3
 
         client_socket.send(message.encode('utf-8'))
         response = client_socket.recv(1024).decode('utf-8')
