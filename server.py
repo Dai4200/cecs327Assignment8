@@ -68,12 +68,18 @@ def main():
             avg = cur.fetchone()[0]
             if avg is None:
                 cur2.execute(
-                'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'3z7-285-2v4-972\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 hour\';')
+                'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture\')::double precision) FROM "assignment7data_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'3z7-285-2v4-972\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 hour\';')
                 avg = cur2.fetchone()[0]
-            avgper = avg
-            cur.execute(
-                'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture 1 24774f23-d689-411b-84e5-4bbe5665cd06\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'4ea9f08a-5969-4f57-b4c5-cc78d82276f7\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 hour\';')
-            avg = cur.fetchone()[0]
+                avgper = avg
+                cur2.execute(
+                    'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture 1 24774f23-d689-411b-84e5-4bbe5665cd06\')::double precision) FROM "assignment7data_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'4ea9f08a-5969-4f57-b4c5-cc78d82276f7\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 hour\';')
+                avg = cur2.fetchone()[0]
+
+            else:
+                avgper = avg
+                cur.execute(
+                    'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture 1 24774f23-d689-411b-84e5-4bbe5665cd06\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'4ea9f08a-5969-4f57-b4c5-cc78d82276f7\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 hour\';')
+                avg = cur.fetchone()[0]
             avgper += avg
             avgper /= 2
             moisture = (avgper - 0) / (40 - 0) * 100
@@ -84,12 +90,17 @@ def main():
             avg = cur.fetchone()[0]
             if avg is None:
                 cur2.execute(
-                'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'3z7-285-2v4-972\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'7 days\';')
+                'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture\')::double precision) FROM "assignment7data_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'3z7-285-2v4-972\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'7 days\';')
                 avg = cur2.fetchone()[0]
-            avgper = avg
-            cur.execute(
-                'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture 1 24774f23-d689-411b-84e5-4bbe5665cd06\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'4ea9f08a-5969-4f57-b4c5-cc78d82276f7\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'7 days\';')
-            avg = cur.fetchone()[0]
+                avgper = avg
+                cur2.execute(
+                    'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture 1 24774f23-d689-411b-84e5-4bbe5665cd06\')::double precision) FROM "assignment7data_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'4ea9f08a-5969-4f57-b4c5-cc78d82276f7\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'7 days\';')
+                avg = cur2.fetchone()[0]
+            else:
+                avgper = avg
+                cur.execute(
+                    'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture 1 24774f23-d689-411b-84e5-4bbe5665cd06\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'4ea9f08a-5969-4f57-b4c5-cc78d82276f7\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'7 days\';')
+                avg = cur.fetchone()[0]
             avgper += avg
             avgper /= 2
             moisture = (avgper - 0) / (40 - 0) * 100
@@ -100,12 +111,17 @@ def main():
             avg = cur.fetchone()[0]
             if avg is None:
                 cur2.execute(
-                'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'3z7-285-2v4-972\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'30 days\';')
+                'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture\')::double precision) FROM "assignment7data_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'3z7-285-2v4-972\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'30 days\';')
                 avg = cur2.fetchone()[0]
-            avgper = avg
-            cur.execute(
-                'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture 1 24774f23-d689-411b-84e5-4bbe5665cd06\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'4ea9f08a-5969-4f57-b4c5-cc78d82276f7\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'30 days\';')
-            avg = cur.fetchone()[0]
+                avgper = avg
+                cur2.execute(
+                    'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture 1 24774f23-d689-411b-84e5-4bbe5665cd06\')::double precision) FROM "assignment7data_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'4ea9f08a-5969-4f57-b4c5-cc78d82276f7\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'30 days\';')
+                avg = cur2.fetchone()[0]
+            else:
+                avgper = avg
+                cur.execute(
+                    'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture 1 24774f23-d689-411b-84e5-4bbe5665cd06\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'4ea9f08a-5969-4f57-b4c5-cc78d82276f7\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'30 days\';')
+                avg = cur.fetchone()[0]
             avgper += avg
             avgper /= 2
             moisture = (avgper - 0) / (40 - 0) * 100
