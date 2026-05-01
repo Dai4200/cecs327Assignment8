@@ -15,27 +15,31 @@ def main():
     conn = psycopg2.connect(
         "postgresql://neondb_owner:npg_SkA08nzqVJaN@ep-crimson-rice-am6t1zgy.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
     )
-
+    conn2=psycopg2.connect(
+        "postgresql://neondb_owner:npg_MiFfNHu9SY8R@ep-autumn-recipe-amo5a3ph-pooler.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+    )
     cur = conn.cursor()
-    '''
+    cur2 = conn2.cursor()
+
     #FROM HERE ON ITS HOW TO GET THE AVERAGE WATER CONSUMPTION
     #STILL NEED TO IMPLEMENT WHEN TO SEARCH OTHER DB FOR MISSING ENTRIES 
-    cur.execute('SELECT COUNT(*) AS total_entries FROM "My_IoT_Table_virtual";')
+    cur2.execute('SELECT COUNT(*) AS total_entries FROM "assignment7data_virtual";')
 
-    result = cur.fetchone()  # returns a single row
+    result = cur2.fetchone()  # returns a single row
     total_entries = result[0]
 
     #get timestamp and convert to Los Angeles datetime
     #gets timestamps
-    cur.execute('SELECT payload, payload ->> \'timestamp\' AS timestamp, payload ->> \'asset_uid\' AS asset_uid FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' ORDER BY timestamp DESC LIMIT 8;')
+    cur2.execute('SELECT payload, payload ->> \'timestamp\' AS timestamp, payload ->> \'asset_uid\' AS asset_uid FROM "assignment7data_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' ORDER BY timestamp DESC LIMIT 8;')
 
-    results = cur.fetchall()
+    results = cur2.fetchall()
     print("Total entries:", total_entries)
     print(datetime.fromtimestamp(1777513025, tz = zoneinfo.ZoneInfo("America/Los_Angeles")))
     for item in results:
         print(item)
         #converts Unix timestamp to datetime
         print(datetime.fromtimestamp(int(item[1]), tz= zoneinfo.ZoneInfo("America/Los_Angeles")))
+        '''
     print("\n\n\nNext Part")
     #get the last eight water flow sensor entries
     cur.execute('SELECT payload, payload ->> \'timestamp\' AS timestamp FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'0l4-31e-g1h-037\' ORDER BY timestamp DESC LIMIT 8;')
@@ -149,9 +153,9 @@ def main():
     print("watts per hour", diego_consumption)'''
     # get timestamp and convert to Los Angeles datetime
     # gets timestamps
-    cur.execute(
-        'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'asset_uid\' = \'3z7-285-2v4-972\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 hours\';')
-    avg = cur.fetchone()[0]
+    cur2.execute(
+        'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture 1 24774f23-d689-411b-84e5-4bbe5665cd06\')::double precision) FROM "assignment7data_virtual" WHERE payload ->> \'asset_uid\' = \'4ea9f08a-5969-4f57-b4c5-cc78d82276f7\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'2 hours\';')
+    avg = cur2.fetchone()[0]
     print(avg)
 
     cur.close()
