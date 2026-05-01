@@ -17,7 +17,7 @@ def main():
     )
 
     cur = conn.cursor()
-
+    '''
     #FROM HERE ON ITS HOW TO GET THE AVERAGE WATER CONSUMPTION
     #STILL NEED TO IMPLEMENT WHEN TO SEARCH OTHER DB FOR MISSING ENTRIES 
     cur.execute('SELECT COUNT(*) AS total_entries FROM "My_IoT_Table_virtual";')
@@ -83,7 +83,7 @@ def main():
         'SELECT payload, payload ->> \'timestamp\' AS timestamp FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 hour\' ORDER BY timestamp DESC LIMIT 8;')
     for item in cur.fetchall():
         print(item)
-
+    '''
 
 
     #MEASURING WHICH HOUSE CONSUMED THE MOST ENERGY IN THE PAST 24 HOURS
@@ -99,6 +99,55 @@ def main():
     d_fridge2auid = "5jd-17k-840-1jx"
     d_dishauid = "nq3-hfy-9e4-r30"
 
+    cur.execute('SELECT payload, payload ->> \'timestamp\' AS timestamp, payload ->> \'asset_uid\' AS asset_uid FROM "My_IoT_Table_virtual" WHERE payload ->> \'asset_uid\' = \'nq3-hfy-9e4-r30\' ORDER BY timestamp DESC LIMIT 8;')
+    payload = cur.fetchall()
+    for item in payload:
+        print(item)
+    #get SUM of Amperage used on 5 minute intervals of julians stuff
+    #julian fridge #1
+    cur.execute(
+        'SELECT SUM((payload ->> \'smartfridgeammeter\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'ii9-v0j-e92-d3g\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 days\';')
+    f1cons = cur.fetchone()[0]
+    print(f1cons)
+
+    # julian fridge #2
+    cur.execute(
+        'SELECT SUM((payload ->> \'smartfridgeammeter 1 24774f23-d689-411b-84e5-4bbe5665cd06\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'b6946ed7-5447-4812-a9be-c1a64d02b56c\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 days\';')
+    f2cons = cur.fetchone()[0]
+    print(f1cons)
+
+    # julian dishwasher
+    cur.execute(
+        'SELECT SUM((payload ->> \'ACS712 - smartdishwasherammeter\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'u6h-n50-6dj-34f\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 days\';')
+    f3cons = cur.fetchone()[0]
+    print(f3cons)
+
+    #watts per hour used shown by the sum of the current measured at 5 minute intervals in Amps * average volatge of each appliance * delta time(5 min intervals converted to hours)
+    julian_consumption = (f1cons + f2cons + f3cons) * 120 * (5/60)
+    print("watts per hour", julian_consumption)
+
+    # get SUM of Amperage used on 1 minute intervals of diegos stuff
+    # diego fridge #1
+    cur.execute(
+        'SELECT SUM((payload ->> \'Fridge-Ammeter\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'7pf-50d-om7-y4s\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 days\';')
+    f1cons = cur.fetchone()[0]
+    print(f1cons)
+
+    # diego fridge #2
+    cur.execute(
+        'SELECT SUM((payload ->> \'Fridge-Ammeter 3 706390d0-9625-4fd2-b6b4-bf81ce0fe5ad\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'5jd-17k-840-1jx\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 days\';')
+    f2cons = cur.fetchone()[0]
+    print(f1cons)
+
+    # diego dishwasher
+    cur.execute(
+        'SELECT SUM((payload ->> \'Dish-Ammeter\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'nq3-hfy-9e4-r30\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 days\';')
+    f3cons = cur.fetchone()[0]
+    print(f3cons)
+
+    # watts per hour used shown by the sum of the current measured at 1 minute intervals in Amps * average volatge of each appliance * delta time(5 min intervals converted to hours)
+    diego_consumption = (f1cons + f2cons + f3cons) * 120 * (1/60)
+    print("watts per hour", diego_consumption)
 
 
     cur.close()
