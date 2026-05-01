@@ -168,7 +168,54 @@ def main():
             conn.close()
 
         if message == query3:
-            pass
+            conn = psycopg2.connect(
+                "postgresql://neondb_owner:npg_SkA08nzqVJaN@ep-crimson-rice-am6t1zgy.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+            )
+            cur = conn.cursor()
+
+            # get SUM of Amperage used on 5 minute intervals of julians stuff
+            # julian fridge #1
+            cur.execute(
+                'SELECT SUM((payload ->> \'smartfridgeammeter\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'ii9-v0j-e92-d3g\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 days\';')
+            f1current = cur.fetchone()[0]
+
+            # julian fridge #2
+            cur.execute(
+                'SELECT SUM((payload ->> \'smartfridgeammeter 1 24774f23-d689-411b-84e5-4bbe5665cd06\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'b6946ed7-5447-4812-a9be-c1a64d02b56c\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 days\';')
+            f2current = cur.fetchone()[0]
+
+            # julian dishwasher
+            cur.execute(
+                'SELECT SUM((payload ->> \'ACS712 - smartdishwasherammeter\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'u6h-n50-6dj-34f\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 days\';')
+            f3current = cur.fetchone()[0]
+
+            # watts per hour used shown by the sum of the current measured at 5 minute intervals in Amps * average volatge of each appliance * delta time(5 min intervals converted to hours)
+            julian_consumption = (f1current + f2current + f3current) * 120 * (5 / 60)
+            print("Julians watts per hour", julian_consumption)
+
+            # get SUM of Amperage used on 1 minute intervals of diegos stuff
+            # diego fridge #1
+            cur.execute(
+                'SELECT SUM((payload ->> \'Fridge-Ammeter\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'7pf-50d-om7-y4s\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 days\';')
+            f1current = cur.fetchone()[0]
+
+            # diego fridge #2
+            cur.execute(
+                'SELECT SUM((payload ->> \'Fridge-Ammeter 3 706390d0-9625-4fd2-b6b4-bf81ce0fe5ad\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'5jd-17k-840-1jx\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 days\';')
+            f2current = cur.fetchone()[0]
+
+            # diego dishwasher
+            cur.execute(
+                'SELECT SUM((payload ->> \'Dish-Ammeter\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'nq3-hfy-9e4-r30\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 days\';')
+            f3current = cur.fetchone()[0]
+
+            # watts per hour used shown by the sum of the current measured at 1 minute intervals in Amps * average volatge of each appliance * delta time(5 min intervals converted to hours)
+            diego_consumption = (f1current + f2current + f3current) * 120 * (1 / 60)
+            print("Diegos average watts per hour", diego_consumption)
+            if diego_consumption < julian_consumption:
+                messages += f"julian consumed {((julian_consumption - diego_consumption) * 24):.5f} more watts in the last 24 hours than diego"
+            else:
+                messages += f"diego consumed {((diego_consumption - julian_consumption) * 24):.5f} more watts in the last 24 hours than diego"
 
         client_socket.send(messages.encode('utf-8'))
         print(f"Sent: {messages}\n")
