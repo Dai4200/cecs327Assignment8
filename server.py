@@ -187,7 +187,7 @@ def main():
                 avg = cur2.fetchone()[0]
 
             avggalperMin = ((avg / 450) / 5) * 0.2641729
-            messages += f"Average water consumption was {avggalperMin:.5f} L/min for the last hour by Julian's dishwasher\n"
+            messages += f"Average water consumption was {avggalperMin:.5f} gal/min for the last hour by Julian's dishwasher\n"
 
             # get the average pulses from the water flow sensor for the last 7 days for Julians dishwasher
             cur.execute(
@@ -198,7 +198,7 @@ def main():
                 'SELECT AVG((payload ->> \'YF-S201 - smartdishwasherwaterflow\')::double precision) FROM "assignment7data_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'0l4-31e-g1h-037\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'7 days\';')
                 avg = cur2.fetchone()[0]
             avggalperMin = ((avg / 450) / 5) * 0.2641729
-            messages += f"Average water consumption was {avggalperMin:.5f} L/min for the last 7 days by Julian's dishwasher\n"
+            messages += f"Average water consumption was {avggalperMin:.5f} gal/min for the last 7 days by Julian's dishwasher\n"
 
             # get the average pulses from the water flow sensor for the last 30 days for Julians dishwasher
             cur.execute(
@@ -209,28 +209,28 @@ def main():
                 'SELECT AVG((payload ->> \'YF-S201 - smartdishwasherwaterflow\')::double precision) FROM "assignment7data_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'0l4-31e-g1h-037\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'30 days\';')
                 avg = cur2.fetchone()[0]
             avggalperMin = ((avg / 450) / 5) * 0.2641729
-            messages += f"Average water consumption was {avggalperMin:.5f} L/min for the last 30 days by Julian's dishwasher\n"
+            messages += f"Average water consumption was {avggalperMin:.5f} gal/min for the last 30 days by Julian's dishwasher\n"
 
             # get the average pulses from the water flow sensor for the last hour for Diegos dishwasher
             cur.execute(
                 'SELECT AVG((payload ->> \'Dish-WaterConsumptionSensor\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'7p7-n87-wnt-y6w\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 hour\';')
             avg = cur.fetchone()[0]
             avggalperMin = (avg / 450) * 0.2641729
-            messages += f"Average water consumption was {avggalperMin:.5f} L/min for the last hour by Diego's dishwasher\n"
+            messages += f"Average water consumption was {avggalperMin:.5f} gal/min for the last hour by Diego's dishwasher\n"
 
             # get the average pulses from the water flow sensor for the last 7 days for Diegos dishwasher
             cur.execute(
                 'SELECT AVG((payload ->> \'Dish-WaterConsumptionSensor\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'7p7-n87-wnt-y6w\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'7 days\';')
             avg = cur.fetchone()[0]
             avggalperMin = (avg / 450) * 0.2641729
-            messages += f"Average water consumption was {avggalperMin:.5f} L/min for the last 7 days by Diego's dishwasher\n"
+            messages += f"Average water consumption was {avggalperMin:.5f} gal/min for the last 7 days by Diego's dishwasher\n"
 
             # get the average pulses from the water flow sensor for the last 30 days for Diegos dishwasher
             cur.execute(
                 'SELECT AVG((payload ->> \'Dish-WaterConsumptionSensor\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'7p7-n87-wnt-y6w\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'30 days\';')
             avg = cur.fetchone()[0]
             avggalperMin = (avg / 450) * 0.2641729
-            messages += f"Average water consumption was {avggalperMin:.5f} L/min for the last 30 days by Diego's dishwasher\n"
+            messages += f"Average water consumption was {avggalperMin:.5f} gal/min for the last 30 days by Diego's dishwasher\n"
 
             cur.close()
             cur2.close()
