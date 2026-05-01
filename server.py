@@ -60,16 +60,6 @@ def main():
             )
 
             cur = conn.cursor()
-            # get timestamp and convert to Los Angeles datetime
-            # gets timestamps
-            cur.execute(
-                'SELECT payload, payload ->> \'timestamp\' AS timestamp, payload ->> \'asset_uid\' AS asset_uid FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' ORDER BY timestamp DESC LIMIT 8;')
-
-            results = cur.fetchall()
-            print(datetime.fromtimestamp(1777513025, tz=zoneinfo.ZoneInfo("America/Los_Angeles")))
-            for item in results:
-                # converts Unix timestamp to datetime
-                print(datetime.fromtimestamp(int(item[1]), tz=zoneinfo.ZoneInfo("America/Los_Angeles")))
 
             # Julian
             cur.execute(
