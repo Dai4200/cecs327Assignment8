@@ -83,7 +83,6 @@ def main():
         'SELECT payload, payload ->> \'timestamp\' AS timestamp FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' = \'diegosaurus2004@gmail.com/Assignment7\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 hour\' ORDER BY timestamp DESC LIMIT 8;')
     for item in cur.fetchall():
         print(item)
-    '''
 
 
     #MEASURING WHICH HOUSE CONSUMED THE MOST ENERGY IN THE PAST 24 HOURS
@@ -147,8 +146,13 @@ def main():
 
     # watts per hour used shown by the sum of the current measured at 1 minute intervals in Amps * average volatge of each appliance * delta time(5 min intervals converted to hours)
     diego_consumption = (f1cons + f2cons + f3cons) * 120 * (1/60)
-    print("watts per hour", diego_consumption)
-
+    print("watts per hour", diego_consumption)'''
+    # get timestamp and convert to Los Angeles datetime
+    # gets timestamps
+    cur.execute(
+        'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'asset_uid\' = \'3z7-285-2v4-972\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 hours\';')
+    avg = cur.fetchone()[0]
+    print(avg)
 
     cur.close()
     conn.close()

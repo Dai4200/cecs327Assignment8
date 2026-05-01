@@ -51,20 +51,25 @@ def main():
         messages = ''
 
         if message == query1:
-            conn2 = psycopg2.connect(
-                "postgresql://neondb_owner:npg_MiFfNHu9SY8R@ep-autumn-recipe-amo5a3ph-pooler.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
-            )
 
             conn = psycopg2.connect(
                 "postgresql://neondb_owner:npg_SkA08nzqVJaN@ep-crimson-rice-am6t1zgy.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
             )
+            conn2 = psycopg2.connect(
+                "postgresql://neondb_owner:npg_MiFfNHu9SY8R@ep-autumn-recipe-amo5a3ph-pooler.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+            )
 
             cur = conn.cursor()
+            cur2 = conn2.cursor()
 
             # Julian
             cur.execute(
                 'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'3z7-285-2v4-972\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 hour\';')
             avg = cur.fetchone()[0]
+            if avg is None:
+                cur2.execute(
+                'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'3z7-285-2v4-972\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 hour\';')
+                avg = cur2.fetchone()[0]
             avgper = avg
             cur.execute(
                 'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture 1 24774f23-d689-411b-84e5-4bbe5665cd06\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'4ea9f08a-5969-4f57-b4c5-cc78d82276f7\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'1 hour\';')
@@ -77,6 +82,10 @@ def main():
             cur.execute(
                 'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'3z7-285-2v4-972\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'7 days\';')
             avg = cur.fetchone()[0]
+            if avg is None:
+                cur2.execute(
+                'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'3z7-285-2v4-972\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'7 days\';')
+                avg = cur2.fetchone()[0]
             avgper = avg
             cur.execute(
                 'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture 1 24774f23-d689-411b-84e5-4bbe5665cd06\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'4ea9f08a-5969-4f57-b4c5-cc78d82276f7\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'7 days\';')
@@ -85,6 +94,22 @@ def main():
             avgper /= 2
             moisture = (avgper - 0) / (40 - 0) * 100
             messages += f"Average moisture was {moisture:.5f} % for the last week in Julian's fridges\n"
+
+            cur.execute(
+                'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'3z7-285-2v4-972\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'30 days\';')
+            avg = cur.fetchone()[0]
+            if avg is None:
+                cur2.execute(
+                'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'3z7-285-2v4-972\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'30 days\';')
+                avg = cur2.fetchone()[0]
+            avgper = avg
+            cur.execute(
+                'SELECT AVG((payload ->> \'Moisture Meter - smartfridgemoisture 1 24774f23-d689-411b-84e5-4bbe5665cd06\')::double precision) FROM "My_IoT_Table_virtual" WHERE payload ->> \'topic\' <> \'diegosaurus2004@gmail.com/Assignment7\' AND payload ->> \'asset_uid\' = \'4ea9f08a-5969-4f57-b4c5-cc78d82276f7\' AND to_timestamp(CAST(payload ->> \'timestamp\' AS INTEGER)) >= NOW() - INTERVAL \'30 days\';')
+            avg = cur.fetchone()[0]
+            avgper += avg
+            avgper /= 2
+            moisture = (avgper - 0) / (40 - 0) * 100
+            messages += f"Average moisture was {moisture:.5f} % for the 30 days in Julian's fridges\n"
 
             # Diego
             cur.execute(
@@ -114,7 +139,6 @@ def main():
             messages += f"Average moisture was {moisture:.5f} % for the last hour in Diego's fridges\n"
 
             conn.close()
-            conn2.close()
 
         if message == query2:
             conn = psycopg2.connect(
@@ -215,7 +239,10 @@ def main():
             if diego_consumption < julian_consumption:
                 messages += f"julian consumed {((julian_consumption - diego_consumption) * 24):.5f} more watts in the last 24 hours than diego"
             else:
-                messages += f"diego consumed {((diego_consumption - julian_consumption) * 24):.5f} more watts in the last 24 hours than diego"
+                messages += f"diego consumed {((diego_consumption - julian_consumption) * 24):.5f} more watts in the last 24 hours than julian"
+
+            cur.close()
+            conn.close()
 
         client_socket.send(messages.encode('utf-8'))
         print(f"Sent: {messages}\n")
